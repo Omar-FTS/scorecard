@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RISC Scorecard — Design Mockup</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Brand tokens ── */
+    :root {
+      --brand-blue:       #00A4EF;
+      --brand-black:      #212121;
+      --brand-orange:     #F25022;
+      --brand-yellow:     #FFB900;
+      --brand-gray:       #737373;
+      --brand-light:      #F5F5F5;
+      --brand-border:     #E0E0E0;
+      --brand-input-border: #CCCCCC;
+      --brand-blue-dark:  #0090D4;
+      --brand-blue-bg:    #E6F6FD;
+      --brand-yellow-bg:  #FFF8E6;
+      --brand-orange-bg:  #FDEEE9;
+      --brand-yellow-text:#B38900;
+      --brand-orange-text:#C2400D;
+      --brand-blue-text:  #0090D4;
+      --brand-cta-dark:   #0C447C;
+      --brand-cta-mid:    #185FA5;
+      --font: 'Montserrat', 'Gotham', sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: #fff;
+      color: var(--brand-black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Shared layout ── */
+    body {
+      background: #F9FAFB;
+    }
+    .screen { 
+      background: #FFFFFF;
+      max-width: 720px; 
+      margin: 40px auto; 
+      padding: 48px 40px; 
+      border-radius: 16px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04), 0 1px 4px rgba(0, 0, 0, 0.02);
+    }
+    @media (max-width: 767px) {
+      .screen { margin: 20px 16px; padding: 32px 24px; }
+      .hide-mobile { display: none; }
+    }
+
+    /* ── Screen label (design-only) ── */
+    .screen-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      background: var(--brand-blue);
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+
+    /* ── Logo ── */
+    .logo { margin-bottom: 32px; min-width: 160px; }
+    .logo svg text { font-family: var(--font); }
+
+    /* ── Typography ── */
+    h1 { font-size: 26px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.01em; color: #111827; }
+    @media (min-width: 768px) { h1 { font-size: 30px; } }
+    h2 { font-size: 22px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; color: #111827; }
+    h3 { font-size: 16px; font-weight: 600; color: #1F2937; }
+    p.body { font-size: 16px; line-height: 1.7; margin-bottom: 24px; color: #374151; }
+    p.sub  { font-size: 14px; color: #6B7280; margin-bottom: 24px; }
+    p.micro { font-size: 13px; color: #6B7280; }
+
+    /* ── Buttons ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 48px;
+      padding: 0 28px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+      border: none;
+      width: 100%;
+      text-decoration: none;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn-primary { 
+      background: var(--brand-blue); 
+      color: #fff; 
+      box-shadow: 0 4px 12px rgba(0, 164, 239, 0.25); 
+    }
+    .btn-primary:hover { 
+      background: var(--brand-blue-dark); 
+      box-shadow: 0 6px 16px rgba(0, 164, 239, 0.35); 
+      transform: translateY(-1px);
+    }
+    .btn-secondary { 
+      background: #fff; 
+      color: var(--brand-black); 
+      border: 1px solid var(--brand-input-border); 
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+    }
+    .btn-secondary:hover { 
+      background: var(--brand-light); 
+      border-color: #B3B3B3;
+      transform: translateY(-1px);
+    }
+    .btn-row { display: flex; gap: 12px; margin-top: 8px; }
+    @media (max-width: 767px) { .btn-row { flex-direction: column-reverse; } }
+
+    /* ── Pillar pills ── */
+    .pills { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 32px; }
+    @media (min-width: 768px) { .pills { grid-template-columns: repeat(4, 1fr); } }
+    .pill { 
+      padding: 12px 16px; 
+      border-radius: 10px; 
+      text-align: center; 
+      font-size: 14px; 
+      font-weight: 600; 
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s;
+    }
+    .pill:hover { transform: translateY(-1px); }
+    .pill-r { background: #F0F9FF; color: #0369A1; border: 1px solid #E0F2FE; }
+    .pill-i { background: #FEF9C3; color: #A16207; border: 1px solid #FEF08A; }
+    .pill-s { background: #FFEDD5; color: #C2410C; border: 1px solid #FED7AA; }
+    .pill-c { background: #F3F4F6; color: #4B5563; border: 1px solid #E5E7EB; }
+    .pill b { font-weight: 700; margin-right: 4px; }
+
+    /* ── Progress bar ── */
+    .progress-track { height: 6px; background: #F3F4F6; border-radius: 999px; margin-bottom: 24px; overflow: hidden; }
+    .progress-fill  { 
+      height: 100%; 
+      background: linear-gradient(90deg, #00A4EF, #0090D4); 
+      border-radius: 999px; 
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+    }
+
+    /* ── Pillar step indicators ── */
+    .pillar-steps { display: flex; justify-content: space-between; margin-bottom: 32px; }
+    .pillar-step { display: flex; align-items: center; gap: 8px; font-size: 14px; }
+    @media (max-width: 767px) {
+      .pillar-step span[class^="step-label"] { display: none; }
+    }
+    .step-dot {
+      width: 24px; height: 24px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+    .step-completed { background: var(--brand-blue); color: #fff; box-shadow: 0 2px 4px rgba(0, 164, 239, 0.2); }
+    .step-current   { background: #F0F9FF; border: 2px solid var(--brand-blue); color: var(--brand-blue); }
+    .step-pending   { background: #F3F4F6; color: #9CA3AF; }
+    .step-label-active  { color: #111827; font-weight: 600; }
+    .step-label-done    { color: #0C447C; font-weight: 500; }
+    .step-label-pending { color: #9CA3AF; }
+
+    /* ── Question card ── */
+    .q-card {
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s ease-out;
+    }
+    @media (max-width: 767px) {
+      .q-card { padding: 16px; }
+    }
+    .q-card:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+    }
+    .q-card.answered { 
+      border-color: rgba(0, 164, 239, 0.4); 
+      background: #FAFDFF; 
+      box-shadow: 0 2px 4px -1px rgba(0, 164, 239, 0.06); 
+    }
+    .q-text { font-size: 16px; margin-bottom: 16px; line-height: 1.6; color: #1F2937; font-weight: 500; }
+    .q-scale { display: flex; gap: 8px; }
+    .q-btn {
+      flex: 1;
+      height: 48px;
+      border-radius: 8px;
+      border: 1px solid #D1D5DB;
+      background: #fff;
+      color: #4B5563;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .q-btn:hover { background: #F3F4F6; border-color: #9CA3AF; transform: translateY(-1px); }
+    .q-btn.selected { 
+      background: var(--brand-blue); 
+      border-color: var(--brand-blue); 
+      color: #fff; 
+      transform: scale(1.02);
+      box-shadow: 0 4px 10px rgba(0, 164, 239, 0.3); 
+    }
+    .scale-labels { display: flex; justify-content: space-between; margin-top: 8px; font-size: 12px; color: var(--brand-gray); }
+    .scale-dot { display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: rgba(115,115,115,0.4); vertical-align: middle; margin: 0 4px; }
+
+    /* ── Form ── */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+    @media (max-width: 767px) { .form-grid { grid-template-columns: 1fr; gap: 16px; } }
+    .form-stack { display: flex; flex-direction: column; gap: 20px; margin-bottom: 32px; }
+    .field label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; color: #374151; }
+    .field input {
+      height: 48px; width: 100%; border: 1px solid #D1D5DB; border-radius: 8px;
+      padding: 0 16px; font-size: 15px; font-family: var(--font); outline: none;
+      transition: all 0.2s;
+      background: #FAFAFA;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+    }
+    .field input:hover { background: #FFFFFF; border-color: #B3B3B3; }
+    .field input:focus { 
+      background: #FFFFFF;
+      border-color: var(--brand-blue); 
+      border-width: 1.5px; 
+      box-shadow: 0 0 0 4px rgba(0, 164, 239, 0.15); 
+    }
+    .field-error input { border-color: var(--brand-orange); color: var(--brand-orange); }
+    .field .error-text { font-size: 12px; color: var(--brand-orange); margin-top: 4px; }
+    .privacy { font-size: 12px; color: var(--brand-gray); margin-top: 16px; }
+
+    /* ── Results: overall score ── */
+    .overall { text-align: center; margin-bottom: 32px; }
+    .overall-score { font-size: 48px; font-weight: 700; }
+    .overall-score .denom { font-size: 24px; font-weight: 400; color: var(--brand-gray); }
+    .score-blue   { color: var(--brand-blue-text); }
+    .score-yellow { color: var(--brand-yellow-text); }
+    .score-orange { color: var(--brand-orange-text); }
+
+    /* ── Status badge ── */
+    .badge { display: inline-flex; align-items: center; font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 999px; letter-spacing: 0.02em; }
+    .badge-strong     { background: #F0F9FF; color: #0369A1; border: 1px solid #E0F2FE; }
+    .badge-developing { background: #FEF9C3; color: #A16207; border: 1px solid #FEF08A; }
+    .badge-exposed    { background: #FFE4E6; color: #BE123C; border: 1px solid #FECDD3; }
+
+    /* ── Score cards grid ── */
+    .score-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 40px; }
+    @media (max-width: 767px) { .score-grid { grid-template-columns: 1fr; gap: 16px; } }
+    .score-card { 
+      background: #FFFFFF; 
+      border: 1px solid #E5E7EB; 
+      border-radius: 12px; 
+      padding: 24px; 
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+      transition: box-shadow 0.3s ease;
+    }
+    .score-card:hover {
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+    }
+    .score-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .score-bar-track { height: 8px; background: #F3F4F6; border-radius: 999px; margin-bottom: 12px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 999px; transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .bar-blue   { background: linear-gradient(90deg, #0090D4, var(--brand-blue)); }
+    .bar-yellow { background: linear-gradient(90deg, #E6A700, var(--brand-yellow)); }
+    .bar-orange { background: linear-gradient(90deg, #D64219, var(--brand-orange)); }
+    .score-value { font-size: 26px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; color: #111827; }
+    .score-insight { font-size: 14px; color: #6B7280; line-height: 1.6; }
+
+    /* ── Interpretation ── */
+    .interpretation { 
+      margin-bottom: 40px; 
+      background: #FAFAFA; 
+      padding: 32px; 
+      border-radius: 12px; 
+      border: 1px solid #F3F4F6;
+    }
+    @media (max-width: 767px) {
+      .interpretation { padding: 24px 16px; }
+      .interpretation h3 { font-size: 18px; }
+    }
+    .interpretation h3 { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: #111827; }
+    .interpretation p { font-size: 16px; line-height: 1.8; margin-bottom: 16px; color: #374151; }
+    .interpretation p:last-child { margin-bottom: 0; }
+
+    /* ── Defense banner ── */
+    .defense-banner {
+      background: linear-gradient(135deg, #F0F9FF 0%, #FFFFFF 100%);
+      border-left: 5px solid var(--brand-blue);
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 40px;
+      box-shadow: 0 4px 6px -1px rgba(0, 164, 239, 0.05);
+    }
+    .defense-banner h4 { color: #0C447C; font-size: 20px; font-weight: 700; margin-bottom: 12px; }
+    .defense-banner p { color: #1E3A8A; font-size: 15px; line-height: 1.6; margin-bottom: 20px; max-width: 90%; }
+    @media (max-width: 767px) {
+      .defense-banner { padding: 24px 16px; }
+      .defense-banner p { max-width: 100%; }
+      .defense-banner .btn-outline { display: flex; width: 100%; justify-content: center; text-align: center; }
+    }
+    .defense-banner .btn-outline {
+      display: inline-flex;
+      background: #FFFFFF;
+      color: var(--brand-blue);
+      border: 1.5px solid var(--brand-blue);
+      border-radius: 8px;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      font-family: var(--font);
+      text-decoration: none;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0, 164, 239, 0.1);
+    }
+    .defense-banner .btn-outline:hover { 
+      background: var(--brand-blue); 
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(0, 164, 239, 0.2);
+    }
+
+    /* ── Skeleton loader ── */
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .skeleton { height: 14px; background: var(--brand-light); border-radius: 4px; animation: pulse 1.5s ease-in-out infinite; margin-bottom: 10px; }
+    .skeleton.w-full { width: 100%; }
+    .skeleton.w-3-4  { width: 75%; }
+    .skeleton.w-1-2  { width: 50%; }
+
+    /* ── Validation error ── */
+    .validation-error {
+      background: var(--brand-orange-bg);
+      color: var(--brand-orange-text);
+      font-size: 14px;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    /* ── Fade-in animation ── */
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+    .fade-in { animation: fadeIn 0.25s ease-out; }
+
+    /* ── Interactive Demo Helpers ── */
+    .hidden { display: none !important; }
+
+    /* ── Design-only: screen divider ── */
+    .divider {
+      text-align: center;
+      padding: 40px 16px;
+      background: var(--brand-light);
+    }
+    .divider span {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--brand-gray);
+      position: relative;
+    }
+    .divider span::before, .divider span::after {
+      content: "";
+      display: inline-block;
+      width: 60px;
+      height: 1px;
+      background: var(--brand-border);
+      vertical-align: middle;
+      margin: 0 12px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SCREEN 1 — INTRO                                       -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="screen fade-in">
+  <span class="screen-label">Screen 1 — Intro</span>
+
+  <div class="logo">
+    <svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Optrua">
+      <text x="0" y="30" font-family="Montserrat, Gotham, sans-serif" font-size="28" font-weight="700" fill="#00A4EF">OPTRUA</text>
+    </svg>
+  </div>
+
+  <h1>Is your revenue system ready for AI?</h1>
+
+  <p class="body">
+    The RISC Scorecard evaluates your organization across four critical
+    dimensions of revenue system health. Answer 16 questions to get an
+    instant, AI-personalized assessment of where you stand — and where to
+    focus next.
+  </p>
+
+  <div class="pills">
+    <div class="pill pill-r"><b>R</b><span class="hide-mobile"> — Revenue System Risk</span></div>
+    <div class="pill pill-i"><b>I</b><span class="hide-mobile"> — Integration Readiness</span></div>
+    <div class="pill pill-s"><b>S</b><span class="hide-mobile"> — Systems Alignment</span></div>
+    <div class="pill pill-c"><b>C</b><span class="hide-mobile"> — Confidence &amp; Control</span></div>
+  </div>
+
+  <p class="sub">5–7 minutes. 16 questions. Instant results.</p>
+
+  <button class="btn btn-primary">Start the scorecard</button>
+</div>
+
+<div class="divider"><span>User clicks "Start the scorecard"</span></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SCREEN 2 — QUESTIONS (Pillar R shown)                  -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="screen fade-in">
+  <span class="screen-label">Screen 2 — Questions (Pillar R)</span>
+
+  <div class="logo">
+    <svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="30" font-family="Montserrat, Gotham, sans-serif" font-size="28" font-weight="700" fill="#00A4EF">OPTRUA</text></svg>
+  </div>
+
+  <!-- Progress bar -->
+  <div class="progress-track">
+    <div class="progress-fill" style="width: 0%"></div>
+  </div>
+
+  <!-- Pillar step indicators -->
+  <div class="pillar-steps">
+    <div class="pillar-step">
+      <span class="step-dot step-current"></span>
+      <span class="step-label-active">Revenue System Risk</span>
+    </div>
+    <div class="pillar-step">
+      <span class="step-dot step-pending"></span>
+      <span class="step-label-pending">Integration Readiness</span>
+    </div>
+    <div class="pillar-step">
+      <span class="step-dot step-pending"></span>
+      <span class="step-label-pending">Systems Alignment</span>
+    </div>
+    <div class="pillar-step">
+      <span class="step-dot step-pending"></span>
+      <span class="step-label-pending">Confidence &amp; Control</span>
+    </div>
+  </div>
+
+  <!-- Pillar info -->
+  <p class="micro" style="text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Pillar 1 of 4</p>
+  <h2 style="font-size:18px;">Revenue System Risk</h2>
+  <p style="font-size:14px;font-style:italic;color:var(--brand-gray);margin-bottom:16px;">Where is your pipeline leaking?</p>
+  <p class="micro" style="margin-bottom:16px;">Questions 1–4 of 16</p>
+
+  <!-- Question 1 (answered) -->
+  <div class="q-card answered">
+    <p class="q-text">Deals stall or go quiet without my team knowing why until it's too late.</p>
+    <div class="q-scale">
+      <button class="q-btn">1</button>
+      <button class="q-btn">2</button>
+      <button class="q-btn">3</button>
+      <button class="q-btn selected">4</button>
+      <button class="q-btn">5</button>
+    </div>
+    <div class="scale-labels">
+      <span><span class="scale-dot"></span>Rarely true</span>
+      <span>Always true<span class="scale-dot"></span></span>
+    </div>
+  </div>
+
+  <!-- Question 2 (answered) -->
+  <div class="q-card answered">
+    <p class="q-text">Leads fall through the cracks between marketing handoff and sales follow-up.</p>
+    <div class="q-scale">
+      <button class="q-btn">1</button>
+      <button class="q-btn">2</button>
+      <button class="q-btn selected">3</button>
+      <button class="q-btn">4</button>
+      <button class="q-btn">5</button>
+    </div>
+    <div class="scale-labels">
+      <span><span class="scale-dot"></span>Rarely true</span>
+      <span>Always true<span class="scale-dot"></span></span>
+    </div>
+  </div>
+
+  <!-- Question 3 (unanswered) -->
+  <div class="q-card">
+    <p class="q-text">Our pipeline looks healthy on paper but actual close rates tell a different story.</p>
+    <div class="q-scale">
+      <button class="q-btn">1</button>
+      <button class="q-btn">2</button>
+      <button class="q-btn">3</button>
+      <button class="q-btn">4</button>
+      <button class="q-btn">5</button>
+    </div>
+    <div class="scale-labels">
+      <span><span class="scale-dot"></span>Rarely true</span>
+      <span>Always true<span class="scale-dot"></span></span>
+    </div>
+  </div>
+
+  <!-- Question 4 (unanswered) -->
+  <div class="q-card">
+    <p class="q-text">When a deal slips, we're usually surprised — it wasn't flagged early enough.</p>
+    <div class="q-scale">
+      <button class="q-btn">1</button>
+      <button class="q-btn">2</button>
+      <button class="q-btn">3</button>
+      <button class="q-btn">4</button>
+      <button class="q-btn">5</button>
+    </div>
+    <div class="scale-labels">
+      <span><span class="scale-dot"></span>Rarely true</span>
+      <span>Always true<span class="scale-dot"></span></span>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary">Back</button>
+    <button class="btn btn-primary">Continue</button>
+  </div>
+</div>
+
+<div class="divider"><span>Pillars I, S, C follow the same pattern &rarr; then Lead Form</span></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SCREEN 2b — QUESTIONS (Pillar S shown, mid-progress)   -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="screen fade-in">
+  <span class="screen-label">Screen 2b — Questions (Pillar S, mid-progress)</span>
+
+  <div class="logo">
+    <svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="30" font-family="Montserrat, Gotham, sans-serif" font-size="28" font-weight="700" fill="#00A4EF">OPTRUA</text></svg>
+  </div>
+
+  <div class="progress-track">
+    <div class="progress-fill" style="width: 50%"></div>
+  </div>
+
+  <div class="pillar-steps">
+    <div class="pillar-step">
+      <span class="step-dot step-completed">&#10003;</span>
+      <span class="step-label-done">Revenue System Risk</span>
+    </div>
+    <div class="pillar-step">
+      <span class="step-dot step-completed">&#10003;</span>
+      <span class="step-label-done">Integration Readiness</span>
+    </div>
+    <div class="pillar-step">
+      <span class="step-dot step-current"></span>
+      <span class="step-label-active">Systems Alignment</span>
+    </div>
+    <div class="pillar-step">
+      <span class="step-dot step-pending"></span>
+      <span class="step-label-pending">Confidence &amp; Control</span>
+    </div>
+  </div>
+
+  <p class="micro" style="text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">Pillar 3 of 4</p>
+  <h2 style="font-size:18px;">Systems Alignment</h2>
+  <p style="font-size:14px;font-style:italic;color:var(--brand-gray);margin-bottom:16px;">Do teams work from the same source of truth?</p>
+  <p class="micro" style="margin-bottom:16px;">Questions 9–12 of 16</p>
+
+  <div class="q-card answered">
+    <p class="q-text">Marketing and sales define a "qualified lead" differently.</p>
+    <div class="q-scale">
+      <button class="q-btn">1</button>
+      <button class="q-btn">2</button>
+      <button class="q-btn">3</button>
+      <button class="q-btn selected">4</button>
+      <button class="q-btn">5</button>
+    </div>
+    <div class="scale-labels">
+      <span><span class="scale-dot"></span>Rarely true</span>
+      <span>Always true<span class="scale-dot"></span></span>
+    </div>
+  </div>
+
+  <div class="q-card answered">
+    <p class="q-text">Customer success doesn't have good visibility into what was promised during the sale.</p>
+    <div class="q-scale">
+      <button class="q-btn">1</button>
+      <button class="q-btn">2</button>
+      <button class="q-btn selected">3</button>
+      <button class="q-btn">4</button>
+      <button class="q-btn">5</button>
+    </div>
+    <div class="scale-labels">
+      <span><span class="scale-dot"></span>Rarely true</span>
+      <span>Always true<span class="scale-dot"></span></span>
+    </div>
+  </div>
+
+  <div class="q-card answered">
+    <p class="q-text">Different teams have different dashboards showing different versions of our performance.</p>
+    <div class="q-scale">
+      <button class="q-btn">1</button>
+      <button class="q-btn">2</button>
+      <button class="q-btn">3</button>
+      <button class="q-btn selected">4</button>
+      <button class="q-btn">5</button>
+    </div>
+    <div class="scale-labels">
+      <span><span class="scale-dot"></span>Rarely true</span>
+      <span>Always true<span class="scale-dot"></span></span>
+    </div>
+  </div>
+
+  <div class="q-card answered">
+    <p class="q-text">When we try to forecast, everyone has their own number and we have to reconcile them.</p>
+    <div class="q-scale">
+      <button class="q-btn">1</button>
+      <button class="q-btn">2</button>
+      <button class="q-btn">3</button>
+      <button class="q-btn">4</button>
+      <button class="q-btn selected">5</button>
+    </div>
+    <div class="scale-labels">
+      <span><span class="scale-dot"></span>Rarely true</span>
+      <span>Always true<span class="scale-dot"></span></span>
+    </div>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary">Back</button>
+    <button class="btn btn-primary">Continue</button>
+  </div>
+</div>
+
+<div class="divider"><span>User completes all 4 pillars &rarr; Lead capture form</span></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SCREEN 3 — LEAD CAPTURE FORM                           -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="screen fade-in">
+  <span class="screen-label">Screen 3 — Lead Capture Form</span>
+
+  <div class="logo">
+    <svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="30" font-family="Montserrat, Gotham, sans-serif" font-size="28" font-weight="700" fill="#00A4EF">OPTRUA</text></svg>
+  </div>
+
+  <h2>Your results are ready</h2>
+  <p class="body" style="color:var(--brand-gray);">
+    Enter your details below to see your personalized RISC Scorecard
+    results. We'll also send a copy to your email.
+  </p>
+
+  <form onsubmit="return false">
+    <div class="form-grid">
+      <div class="field">
+        <label>First Name</label>
+        <input type="text" placeholder="Robert" />
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <input type="text" placeholder="Smith" />
+      </div>
+    </div>
+    <div class="form-stack">
+      <div class="field">
+        <label>Email</label>
+        <input type="email" placeholder="robert@company.com" />
+      </div>
+      <div class="field">
+        <label>Company</label>
+        <input type="text" placeholder="Acme Corp" />
+      </div>
+      <div class="field">
+        <label>Job Title</label>
+        <input type="text" placeholder="VP of Sales" />
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" type="button">Back</button>
+      <button class="btn btn-primary" type="submit">See my results</button>
+    </div>
+  </form>
+  <p class="privacy">Your information is never shared or sold.</p>
+</div>
+
+<div class="divider"><span>Variant — Form with validation errors</span></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SCREEN 3b — LEAD FORM WITH ERRORS                      -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="screen fade-in">
+  <span class="screen-label">Screen 3b — Form Validation Errors</span>
+
+  <div class="logo">
+    <svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="30" font-family="Montserrat, Gotham, sans-serif" font-size="28" font-weight="700" fill="#00A4EF">OPTRUA</text></svg>
+  </div>
+
+  <h2>Your results are ready</h2>
+  <p class="body" style="color:var(--brand-gray);">
+    Enter your details below to see your personalized RISC Scorecard
+    results. We'll also send a copy to your email.
+  </p>
+
+  <form onsubmit="return false">
+    <div class="form-grid">
+      <div class="field field-error">
+        <label>First Name</label>
+        <input type="text" value="" />
+        <p class="error-text">First name is required</p>
+      </div>
+      <div class="field">
+        <label>Last Name</label>
+        <input type="text" value="Smith" />
+      </div>
+    </div>
+    <div class="form-stack">
+      <div class="field field-error">
+        <label>Email</label>
+        <input type="email" value="not-an-email" />
+        <p class="error-text">Please enter a valid email address</p>
+      </div>
+      <div class="field">
+        <label>Company</label>
+        <input type="text" value="Acme Corp" />
+      </div>
+      <div class="field">
+        <label>Job Title</label>
+        <input type="text" value="" />
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" type="button">Back</button>
+      <button class="btn btn-primary" type="submit">See my results</button>
+    </div>
+  </form>
+  <p class="privacy">Your information is never shared or sold.</p>
+</div>
+
+<div class="divider"><span>User submits form &rarr; Loading &rarr; Results</span></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SCREEN 4a — RESULTS LOADING                            -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="screen fade-in">
+  <span class="screen-label">Screen 4a — Results Loading</span>
+
+  <div class="logo">
+    <svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="30" font-family="Montserrat, Gotham, sans-serif" font-size="28" font-weight="700" fill="#00A4EF">OPTRUA</text></svg>
+  </div>
+
+  <div style="text-align:center;margin-bottom:32px;">
+    <div class="skeleton w-1-2" style="height:48px;margin:0 auto 8px;max-width:160px;"></div>
+    <div class="skeleton w-1-2" style="height:20px;margin:0 auto 8px;max-width:100px;"></div>
+    <div class="skeleton w-3-4" style="margin:0 auto;max-width:300px;"></div>
+  </div>
+
+  <div class="score-grid" style="margin-bottom:32px;">
+    <div class="score-card">
+      <div class="skeleton w-full" style="height:16px;margin-bottom:12px;"></div>
+      <div class="skeleton w-full" style="height:8px;margin-bottom:8px;"></div>
+      <div class="skeleton w-1-2" style="height:22px;margin-bottom:4px;max-width:48px;"></div>
+      <div class="skeleton w-3-4"></div>
+    </div>
+    <div class="score-card">
+      <div class="skeleton w-full" style="height:16px;margin-bottom:12px;"></div>
+      <div class="skeleton w-full" style="height:8px;margin-bottom:8px;"></div>
+      <div class="skeleton w-1-2" style="height:22px;margin-bottom:4px;max-width:48px;"></div>
+      <div class="skeleton w-3-4"></div>
+    </div>
+    <div class="score-card">
+      <div class="skeleton w-full" style="height:16px;margin-bottom:12px;"></div>
+      <div class="skeleton w-full" style="height:8px;margin-bottom:8px;"></div>
+      <div class="skeleton w-1-2" style="height:22px;margin-bottom:4px;max-width:48px;"></div>
+      <div class="skeleton w-3-4"></div>
+    </div>
+    <div class="score-card">
+      <div class="skeleton w-full" style="height:16px;margin-bottom:12px;"></div>
+      <div class="skeleton w-full" style="height:8px;margin-bottom:8px;"></div>
+      <div class="skeleton w-1-2" style="height:22px;margin-bottom:4px;max-width:48px;"></div>
+      <div class="skeleton w-3-4"></div>
+    </div>
+  </div>
+
+  <p style="text-align:center;font-size:14px;color:var(--brand-gray);">Calculating your results...</p>
+</div>
+
+<div class="divider"><span>Scores load instantly, AI interpretation streams in</span></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SCREEN 4b — RESULTS: "Developing" (3.8)                -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="screen fade-in">
+  <span class="screen-label">Screen 4b — Results: Developing (3.8)</span>
+
+  <div class="logo">
+    <svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="30" font-family="Montserrat, Gotham, sans-serif" font-size="28" font-weight="700" fill="#00A4EF">OPTRUA</text></svg>
+  </div>
+
+  <!-- Overall score -->
+  <div class="overall">
+    <p class="overall-score score-yellow">3.8<span class="denom"> / 5.0</span></p>
+    <div style="margin-top:8px;"><span class="badge badge-developing">Developing</span></div>
+    <p style="font-size:14px;color:var(--brand-gray);margin-top:8px;">Your revenue systems have real strengths, but meaningful gaps in pipeline visibility and data quality may be limiting growth.</p>
+  </div>
+
+  <!-- 4 pillar score cards -->
+  <div class="score-grid">
+    <!-- R — Exposed -->
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Revenue System Risk</h3>
+        <span class="badge badge-exposed">Exposed</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-orange" style="width:80%;"></div></div>
+      <p class="score-value">4.0</p>
+      <p class="score-insight">Pipeline leakage and deal visibility are significant blind spots that need immediate attention.</p>
+    </div>
+    <!-- I — Developing -->
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Integration Readiness</h3>
+        <span class="badge badge-developing">Developing</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-yellow" style="width:76%;"></div></div>
+      <p class="score-value">3.8</p>
+      <p class="score-insight">Data inconsistencies and system gaps exist, but your foundation is workable with focused cleanup.</p>
+    </div>
+    <!-- S — Exposed -->
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Systems Alignment</h3>
+        <span class="badge badge-exposed">Exposed</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-orange" style="width:80%;"></div></div>
+      <p class="score-value">4.0</p>
+      <p class="score-insight">Teams are working from different definitions and dashboards, creating forecast friction.</p>
+    </div>
+    <!-- C — Developing -->
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Confidence &amp; Control</h3>
+        <span class="badge badge-developing">Developing</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-yellow" style="width:70%;"></div></div>
+      <p class="score-value">3.5</p>
+      <p class="score-insight">Leadership has some visibility but hedges forecasts and spends too much time validating data.</p>
+    </div>
+  </div>
+
+  <!-- AI Interpretation (with skeleton for loading state) -->
+  <div class="interpretation">
+    <h3>What this means for your AI readiness</h3>
+    <p>
+      Robert, your scorecard shows real strengths alongside meaningful gaps. Some parts of your revenue system are
+      working well, but inconsistencies in data, alignment, or visibility may be limiting your ability to scale
+      confidently. These are exactly the kinds of issues that surface when organizations start evaluating AI
+      readiness — and the good news is they're addressable.
+    </p>
+    <p>
+      Your pipeline and systems alignment scores stand out as areas where small improvements could have an outsized
+      impact. When deals stall without warning and teams forecast from different numbers, it's a sign that the
+      underlying data layer needs attention before you can trust AI-powered insights.
+    </p>
+    <p>
+      Focused improvements in your weakest pillar could unlock significant gains across the board. Consider starting
+      with a shared definition of pipeline health and consolidating your reporting tools into a single source of truth.
+    </p>
+  </div>
+
+  <!-- Defense Program Banner -->
+  <div class="defense-banner">
+    <h4>Want to go deeper?</h4>
+    <p>
+      The RISC Defense Program is a guided engagement that turns your scorecard insights into a concrete action
+      plan — addressing pipeline gaps, data readiness, team alignment, and leadership confidence with
+      hands-on consulting support.
+    </p>
+    <a href="#" class="btn-outline">Learn about the RISC Defense Program</a>
+  </div>
+
+  <!-- Action buttons -->
+  <div class="btn-row">
+    <button class="btn btn-secondary">Share results</button>
+    <button class="btn btn-secondary">Retake the scorecard</button>
+  </div>
+</div>
+
+<div class="divider"><span>Alternate status variants below</span></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SCREEN 4c — RESULTS: "Strong" (1.8)                    -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="screen fade-in">
+  <span class="screen-label">Screen 4c — Results: Strong (1.8)</span>
+
+  <div class="logo">
+    <svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="30" font-family="Montserrat, Gotham, sans-serif" font-size="28" font-weight="700" fill="#00A4EF">OPTRUA</text></svg>
+  </div>
+
+  <div class="overall">
+    <p class="overall-score score-blue">1.8<span class="denom"> / 5.0</span></p>
+    <div style="margin-top:8px;"><span class="badge badge-strong">Strong</span></div>
+    <p style="font-size:14px;color:var(--brand-gray);margin-top:8px;">Your revenue systems reflect a strong foundation. You're well-positioned to layer AI as an accelerator.</p>
+  </div>
+
+  <div class="score-grid">
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Revenue System Risk</h3>
+        <span class="badge badge-strong">Strong</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-blue" style="width:40%;"></div></div>
+      <p class="score-value">2.0</p>
+      <p class="score-insight">Your pipeline visibility is strong — deals are tracked and flagged proactively.</p>
+    </div>
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Integration Readiness</h3>
+        <span class="badge badge-strong">Strong</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-blue" style="width:30%;"></div></div>
+      <p class="score-value">1.5</p>
+      <p class="score-insight">Your systems share data cleanly and your CRM is reliably maintained.</p>
+    </div>
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Systems Alignment</h3>
+        <span class="badge badge-strong">Strong</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-blue" style="width:40%;"></div></div>
+      <p class="score-value">2.0</p>
+      <p class="score-insight">Teams work from shared definitions and a single source of truth.</p>
+    </div>
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Confidence &amp; Control</h3>
+        <span class="badge badge-strong">Strong</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-blue" style="width:30%;"></div></div>
+      <p class="score-value">1.5</p>
+      <p class="score-insight">Leadership trusts the numbers and can act on data quickly and confidently.</p>
+    </div>
+  </div>
+
+  <div class="interpretation">
+    <h3>What this means for your AI readiness</h3>
+    <div>
+      <div class="skeleton w-full"></div>
+      <div class="skeleton w-full"></div>
+      <div class="skeleton w-3-4"></div>
+      <div style="height:16px;"></div>
+      <div class="skeleton w-full"></div>
+      <div class="skeleton w-full"></div>
+      <div class="skeleton w-1-2"></div>
+    </div>
+    <p style="font-size:13px;color:var(--brand-gray);margin-top:12px;font-style:italic;">AI interpretation loading...</p>
+  </div>
+
+  <div class="defense-banner">
+    <h4>Want to go deeper?</h4>
+    <p>
+      The RISC Defense Program is a guided engagement that turns your scorecard insights into a concrete action
+      plan — addressing pipeline gaps, data readiness, team alignment, and leadership confidence with
+      hands-on consulting support.
+    </p>
+    <a href="#" class="btn-outline">Learn about the RISC Defense Program</a>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary">Share results</button>
+    <button class="btn btn-secondary">Retake the scorecard</button>
+  </div>
+</div>
+
+<div class="divider"><span>&nbsp;</span></div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- SCREEN 4d — RESULTS: "Exposed" (4.5)                   -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div class="screen fade-in">
+  <span class="screen-label">Screen 4d — Results: Exposed (4.5)</span>
+
+  <div class="logo">
+    <svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg"><text x="0" y="30" font-family="Montserrat, Gotham, sans-serif" font-size="28" font-weight="700" fill="#00A4EF">OPTRUA</text></svg>
+  </div>
+
+  <div class="overall">
+    <p class="overall-score score-orange">4.5<span class="denom"> / 5.0</span></p>
+    <div style="margin-top:8px;"><span class="badge badge-exposed">Exposed</span></div>
+    <p style="font-size:14px;color:var(--brand-gray);margin-top:8px;">Significant gaps across your revenue systems are likely affecting pipeline visibility, forecast accuracy, and team alignment.</p>
+  </div>
+
+  <div class="score-grid">
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Revenue System Risk</h3>
+        <span class="badge badge-exposed">Exposed</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-orange" style="width:100%;"></div></div>
+      <p class="score-value">5.0</p>
+      <p class="score-insight">Pipeline leakage is a critical blind spot — deals are slipping without early warning signals.</p>
+    </div>
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Integration Readiness</h3>
+        <span class="badge badge-exposed">Exposed</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-orange" style="width:86%;"></div></div>
+      <p class="score-value">4.3</p>
+      <p class="score-insight">Data fragmentation and manual workarounds mean AI would amplify existing problems, not solve them.</p>
+    </div>
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Systems Alignment</h3>
+        <span class="badge badge-exposed">Exposed</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-orange" style="width:86%;"></div></div>
+      <p class="score-value">4.3</p>
+      <p class="score-insight">Teams operate in silos with conflicting metrics, making coordinated action nearly impossible.</p>
+    </div>
+    <div class="score-card">
+      <div class="score-card-header">
+        <h3>Confidence &amp; Control</h3>
+        <span class="badge badge-exposed">Exposed</span>
+      </div>
+      <div class="score-bar-track"><div class="score-bar-fill bar-orange" style="width:88%;"></div></div>
+      <p class="score-value">4.4</p>
+      <p class="score-insight">Leadership lacks confidence in the data and spends more time questioning it than acting on it.</p>
+    </div>
+  </div>
+
+  <div class="interpretation">
+    <h3>What this means for your AI readiness</h3>
+    <p>
+      Robert, your scorecard highlights significant gaps across your revenue systems that are likely affecting
+      pipeline visibility, forecast accuracy, and team alignment. These challenges often compound — fragmented
+      data leads to misaligned teams, which erodes leadership confidence.
+    </p>
+    <p>
+      The path forward starts with stabilizing your foundation: cleaning up data, aligning definitions across
+      teams, and building reliable reporting. These aren't just prerequisites for AI — they're prerequisites
+      for predictable revenue growth.
+    </p>
+    <p>
+      The good news is that organizations at this stage often see the most dramatic improvements once the right
+      systems and processes are in place. A structured remediation plan can turn these exposed areas into
+      competitive advantages.
+    </p>
+  </div>
+
+  <div class="defense-banner">
+    <h4>Want to go deeper?</h4>
+    <p>
+      The RISC Defense Program is a guided engagement that turns your scorecard insights into a concrete action
+      plan — addressing pipeline gaps, data readiness, team alignment, and leadership confidence with
+      hands-on consulting support.
+    </p>
+    <a href="#" class="btn-outline">Learn about the RISC Defense Program</a>
+  </div>
+
+  <div class="btn-row">
+    <button class="btn btn-secondary">Share results</button>
+    <button class="btn btn-secondary">Retake the scorecard</button>
+  </div>
+</div>
+
+<div class="divider"><span>End of mockup</span></div>
+
+<script>
+  (function() {
+    // Hide design dividers
+    document.querySelectorAll('.divider').forEach(el => el.classList.add('hidden'));
+
+    // Collect screens and index them
+    const screens = Array.from(document.querySelectorAll('.screen'));
+    screens.forEach((screen, index) => {
+      if (index > 0) screen.classList.add('hidden'); // Show only first screen
+      
+      // Wire up buttons within this screen to go backward/forward based on text
+      const buttons = screen.querySelectorAll('.btn');
+      buttons.forEach(btn => {
+        const text = btn.textContent.trim().toLowerCase();
+        
+        if (text === 'start the scorecard' || text === 'continue') {
+          btn.addEventListener('click', () => {
+            let nextIndex = index + 1;
+            if (nextIndex < screens.length) {
+              screen.classList.add('hidden');
+              screens[nextIndex].classList.remove('hidden');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          });
+        }
+        else if (text === 'back') {
+          btn.addEventListener('click', () => {
+            if (index > 0) {
+              screen.classList.add('hidden');
+              screens[index - 1].classList.remove('hidden');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          });
+        }
+        else if (text === 'retake the scorecard') {
+          btn.addEventListener('click', () => {
+            screen.classList.add('hidden');
+            screens[0].classList.remove('hidden'); // Back to start
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+          });
+        }
+      });
+    });
+
+    // Custom flow for Form submission -> Loading -> Results
+    const formScreenIndex = 3;  // Screen 3
+    const errorFormIndex = 4;   // Screen 3b
+    const loadingIndex = 5;     // Screen 4a
+    const resultIndices = [6, 7, 8]; // Screen 4b, 4c, 4d
+
+    // Screen 3 Submit
+    const s3Submit = screens[formScreenIndex].querySelector('button[type="submit"]');
+    if (s3Submit) {
+      s3Submit.addEventListener('click', (e) => {
+        e.preventDefault();
+        // Simulate a validation error taking you to 3b on first try, or go to loading immediately
+        // For simplicity, let's just go straight to loading.
+        screens[formScreenIndex].classList.add('hidden');
+        screens[loadingIndex].classList.remove('hidden');
+        triggerLoading();
+      });
+    }
+
+    // Screen 3b (Error form) logic too, just in case user ends up there
+    const s3bSubmit = screens[errorFormIndex].querySelector('button[type="submit"]');
+    if (s3bSubmit) {
+      s3bSubmit.addEventListener('click', (e) => {
+        e.preventDefault();
+        screens[errorFormIndex].classList.add('hidden');
+        screens[loadingIndex].classList.remove('hidden');
+        triggerLoading();
+      });
+    }
+    
+    // Wire up question answers (1-5 scale) to toggle selections
+    document.querySelectorAll('.q-card').forEach(card => {
+      const qBtns = card.querySelectorAll('.q-btn');
+      qBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove selected from siblings
+          qBtns.forEach(b => b.classList.remove('selected'));
+          btn.classList.add('selected');
+          card.classList.add('answered');
+        });
+      });
+    });
+
+    function triggerLoading() {
+      // Simulate API call and score calculation delay
+      window.scrollTo({ top: 0, behavior: 'auto' });
+      setTimeout(() => {
+        screens[loadingIndex].classList.add('hidden');
+        // Pick a random result screen (4b, 4c, or 4d) for variety
+        const randomResult = resultIndices[Math.floor(Math.random() * resultIndices.length)];
+        screens[randomResult].classList.remove('hidden');
+      }, 2500);
+    }
+  })();
+</script>
+
+</body>
+</html>
